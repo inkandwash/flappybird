@@ -59,7 +59,8 @@ export class Director{
     // 游戏结束的条件: 撞天,撞地,撞水管
     let pipes = this.dataStore.get("pipes");
     let birds = this.dataStore.get("birds");
-    let land = this.dataStore.get("land");
+    let land  = this.dataStore.get("land");
+    let score = this.dataStore.get("score");
     // 撞天(小鸟的birdsY坐标小于0)或者撞地(小鸟的birdsY坐标+自身的高大于地板的位置)
     if(birds.birdsY[0]<0 || birds.birdsY[0]+birds.clippingHeight[0]>land.y){
       this.isGameOver = true;
@@ -88,6 +89,12 @@ export class Director{
         return ;
       }
     }
+
+    //判断有无越过水管
+    if(birds.birdsX[0]>pipes[0].x+pipes[0].w && score.canAdd){
+        score.scoreNumber++;
+        score.canAdd=false;
+    }
   }
 
   // 程序运行的方法
@@ -105,6 +112,7 @@ export class Director{
         // 删除一组上下水管,shift两次
         pipes.shift();
         pipes.shift();
+        this.dataStore.get("score").canAdd=true;
       }
       // 添加下一组水管: 当前只有一组水管,且这组水管已经越过中线
       if(pipes[0].x<this.dataStore.canvas.width/2 && pipes.length==2){
@@ -115,10 +123,22 @@ export class Director{
         pipe.draw();
       })
       this.dataStore.get("birds").draw();
+      this.dataStore.get("score").draw();
       this.dataStore.get("land").draw();
       this.id = requestAnimationFrame(()=>this.run())
     }else{ // 游戏结束
       cancelAnimationFrame(this.id);
+      // 重绘图片,解决贴图错乱的问题
+      this.dataStore.get("background").draw();
+      this.dataStore.get("pipes").forEach(v=>{
+        v.draw();
+      })
+      this.dataStore.get("land").draw();
+      this.dataStore.get("birds").draw();
+      this.dataStore.get("score").draw();
+      this.dataStore.get("startButton").draw();
+      // 清空游戏的数据
+      this.dataStore.destory();
     }
     
   }
