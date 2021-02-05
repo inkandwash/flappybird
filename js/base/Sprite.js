@@ -11,8 +11,8 @@ export class Sprite{
     srcH=0,//图片高度
     x=0,//画布上的初始x坐标
     y=0,//画布上的初始x坐标
-    w=0,//画布宽度
-    h=0//画布高度
+    w=0,//图片在画布上的宽度
+    h=0//图片在画布上的高度
   ){
     //获取变量池中ctx对象
      this.ctx=DataStore.getInstance().ctx;
