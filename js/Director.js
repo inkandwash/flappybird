@@ -1,6 +1,7 @@
 // 导演类,控制游戏的逻辑
 
 import { DataStore } from "./base/DataStore";
+import { boom, bullet } from "./music";
 import { DownPipe } from "./runtime/DownPipe";
 import { UpPipe } from "./runtime/UpPipe";
 
@@ -94,6 +95,7 @@ export class Director{
     if(birds.birdsX[0]>pipes[0].x+pipes[0].w && score.canAdd){
         score.scoreNumber++;
         score.canAdd=false;
+        bullet();
     }
   }
 
@@ -127,6 +129,7 @@ export class Director{
       this.dataStore.get("land").draw();
       this.id = requestAnimationFrame(()=>this.run())
     }else{ // 游戏结束
+      boom();
       cancelAnimationFrame(this.id);
       // 重绘图片,解决贴图错乱的问题
       this.dataStore.get("background").draw();

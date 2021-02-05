@@ -5,11 +5,13 @@ import { Resources } from "./js/base/Resourse";
 import { ResourceLoader } from "./js/base/ResourseLoad";
 import { Sprite } from "./js/base/Sprite";
 import { Director } from "./js/Director";
+import { playbgm } from "./js/music";
 import { Birds } from "./js/player/Birds";
 import { Score } from "./js/player/Score";
 import { StartButton } from "./js/player/StartButton";
 import { Background } from "./js/runtime/Background";
 import { Land } from "./js/runtime/Land";
+import wxapi from "./js/WxApi";
 
 export class Main{//定义main类
    constructor(){//构造函数，初始化数据 new的时候调用该方法
@@ -33,6 +35,10 @@ export class Main{//定义main类
      this.store.res=map;
      this.store.canvas=this.canvas;
      this.store.ctx=this.ctx;
+     //playbgm();
+     //wxapi.createUserInfoButton();
+     //wxapi.getUserInfo();
+     wxapi.getTelInfo();
      this.init();//调用初始化游戏方法
      
    }
@@ -48,6 +54,7 @@ export class Main{//定义main类
              .put("birds", new Birds())
              .put("startButton",new StartButton())
              .put("score",new Score())
+             
      //先调用一次出界水管的方法
      this.director.createPipes();
      //调用导演run方法来运行程序
@@ -80,6 +87,8 @@ export class Main{//定义main类
            clientY<endY
           ){
            this.init();
+        }else{
+          //wxapi.showKeyboard();
         } 
        }else{
           this.director.birdsUp();
